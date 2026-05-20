@@ -226,6 +226,8 @@ src/domains/agent-run/features/agents/<agent-id>/
 
 ## 上下文工程与 LLM 请求调试
 
+本项目使用 linnkit 作为 agent 框架，开发文档参考：`linnsy-daemon/node_modules/@linnlabs/linnkit/docs/integration/README.md`
+
 daemon 侧上下文入口统一走 linnkit `context-manager`：
 
 - 已注册 `turn-context`、`system-event`、`subagent-summary`、`user-interjection`、`memory-context` 五类 Linnsy fence，全部作为 `user` role 注入，动态事件不进入 system prompt；`<user_request>` 已在文档中拍板为模型可见的主人真实请求边界，待 T5.7 接入实现。

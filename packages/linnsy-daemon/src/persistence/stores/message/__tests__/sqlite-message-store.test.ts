@@ -175,6 +175,46 @@ describe('sqlite message store', () => {
     }
   });
 
+  test('lists the latest message window in chronological order for agent context', async () => {
+    const home = await createTempLinnsyHome();
+    const db = new Database(join(home, 'state.db'));
+
+    try {
+      createTables(db);
+      const conversations = new SqliteConversationStore(db);
+      const messages = new SqliteMessageStore(db);
+
+      await conversations.upsert({
+        conversationId: 'conv_1',
+        sessionKey: 'linnsy:main:cli:private:local',
+        platform: 'cli',
+        chatType: 'private',
+        chatId: 'local',
+        createdAt: 10,
+        updatedAt: 10
+      });
+
+      for (const id of ['msg_1', 'msg_2', 'msg_3', 'msg_4']) {
+        await messages.insert({
+          messageId: id,
+          conversationId: 'conv_1',
+          role: 'user',
+          source: 'inbound',
+          text: id,
+          createdAt: Number(id.at(-1))
+        });
+      }
+
+      await expect(messages.listRecentByConversation('conv_1', { limit: 2 })).resolves.toMatchObject([
+        { messageId: 'msg_3', text: 'msg_3' },
+        { messageId: 'msg_4', text: 'msg_4' }
+      ]);
+    } finally {
+      db.close();
+      await rm(home, { recursive: true, force: true });
+    }
+  });
+
   test('finds an existing provider message for inbound deduplication', async () => {
     const home = await createTempLinnsyHome();
     const db = new Database(join(home, 'state.db'));

@@ -123,7 +123,7 @@ export function createLinnkitGraphRunExecutor(
   options: CreateLinnkitGraphRunExecutorOptions
 ): RunExecutorPort {
   const logger = options.logger ?? options.foundation.logger;
-  const historyLimit = options.historyLimit ?? 40;
+  const historyLimit = options.historyLimit;
   const scopedToolRuntime = options.toolRuntime === undefined
     ? undefined
     : createPolicyScopedToolRuntime(options.toolRuntime, {
@@ -144,7 +144,7 @@ export function createLinnkitGraphRunExecutor(
         context,
         foundation: options.foundation,
         systemPromptAssembler: options.systemPromptAssembler,
-        historyLimit,
+        ...(historyLimit === undefined ? {} : { historyLimit }),
         ...(options.events === undefined ? {} : { events: options.events })
       });
       const graphExecutor = createGraphExecutorForRun({

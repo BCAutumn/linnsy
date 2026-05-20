@@ -1,12 +1,14 @@
 import {
   createSystemMessage,
   createUserMessage,
+  type AgentSpecContextPolicy,
   type AiMessage
 } from '@linnlabs/linnkit/contracts';
 import {
   agentContext,
   agentOrchestration,
   agentTools,
+  contextPolicyToMustKeepPolicy,
   type FenceInjection,
   type FenceRegistry,
   DEFAULT_MUST_KEEP_POLICY,
@@ -31,6 +33,7 @@ export interface LinnsyAgentInvocationRequest extends AgentInvocationRequest {
   runId?: string;
   fences?: FenceInjection[];
   wakeSource?: RunWakeSource;
+  contextPolicy?: AgentSpecContextPolicy;
 }
 
 export function createAgentMessageOrchestrator(input: {
@@ -47,6 +50,17 @@ export function createAgentMessageOrchestrator(input: {
   return new agentOrchestration.AgentMessageOrchestrator({
     tokenBudget: { maxTokens: 32_000, reservedForResponse: 4_000 },
     processing: { debugMode: false, preserveMetadata: true },
+    resolveContextPolicy(request) {
+      return toLinnsyAgentInvocationRequest(request).contextPolicy;
+    },
+    createProviderRegistry({ contextPolicy, contextBuilderConfig }) {
+      const registry = new agentContext.ContextProviderRegistry();
+      registry.register(new agentContext.AgentCoreContextProvider({
+        mustKeepPolicy: resolveLinnsyMustKeepPolicy(contextPolicy)
+      }));
+      registry.register(new agentContext.AgentWorkingMemoryProvider(contextBuilderConfig));
+      return registry;
+    },
     taskResolver: () => task,
     providerRegistry,
     fenceRegistry: input.fenceRegistry
@@ -75,8 +89,13 @@ function isLinnsyAgentInvocationRequest(value: unknown): value is LinnsyAgentInv
     typeof value.query === 'string' &&
     typeof value.promptKey === 'string' &&
     typeof value.systemPrompt === 'string' &&
+    (value.contextPolicy === undefined || isRecord(value.contextPolicy)) &&
     (value.runId === undefined || typeof value.runId === 'string') &&
     (value.fences === undefined || (Array.isArray(value.fences) && value.fences.every(isFenceInjection)));
+}
+
+function resolveLinnsyMustKeepPolicy(contextPolicy: AgentSpecContextPolicy | undefined): MustKeepPolicy {
+  return contextPolicyToMustKeepPolicy(contextPolicy) ?? createLinnsyMustKeepPolicy();
 }
 
 class LinnsyAgentTask implements agentTasks.IAgentTask {

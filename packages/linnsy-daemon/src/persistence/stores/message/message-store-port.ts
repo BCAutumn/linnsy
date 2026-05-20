@@ -37,4 +37,11 @@ export interface MessageStorePort {
     conversationId: string,
     options?: ListMessagesOptions
   ): Promise<{ messages: MessageRecord[]; nextCursor?: string }>;
+  /**
+   * Agent 上下文读取的是最近发生的消息窗口；返回值仍保持时间正序，方便上层直接交给 linnkit 做预算裁剪。
+   */
+  listRecentByConversation(
+    conversationId: string,
+    options?: Pick<ListMessagesOptions, 'limit'>
+  ): Promise<MessageRecord[]>;
 }

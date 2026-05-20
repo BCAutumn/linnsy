@@ -16,16 +16,17 @@ export async function buildConversationHistory(input: {
   conversationId: string;
   systemPrompt: string;
   query: string;
-  limit: number;
+  limit?: number;
   skipStoredMessages?: boolean;
   includeCurrentUserRequest: boolean;
 }): Promise<AiMessage[]> {
   const history: AiMessage[] = [createSystemMessage('system_prompt', input.systemPrompt)];
   if (input.skipStoredMessages !== true) {
-    const records = await input.foundation.messages.listByConversation(input.conversationId, {
-      limit: input.limit
+    // 模型上下文需要最近发生的事；拿到最近窗口后仍按时间正序交给 linnkit 做预算裁剪。
+    const records = await input.foundation.messages.listRecentByConversation(input.conversationId, {
+      ...(input.limit === undefined ? {} : { limit: input.limit })
     });
-    for (const record of records.messages) {
+    for (const record of records) {
       const message = toAiMessage(record);
       if (message !== undefined) {
         history.push(message);

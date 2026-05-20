@@ -158,6 +158,60 @@ describe('createLinnkitGraphRunExecutor context assembly', () => {
     }
   });
 
+  test('feeds linnkit the recent conversation window instead of the oldest messages', async () => {
+    const home = await createTempLinnsyHome();
+    const capturedMessages: AiMessage[][] = [];
+    const foundation = createLinnsyRuntimeFoundation(minimalConfig(home), {
+      providerRouter: createReplyRouter('recent reply', capturedMessages)
+    });
+
+    try {
+      await foundation.conversations.upsert({
+        conversationId: 'conv_recent',
+        sessionKey: 'linnsy:main:cli:private:recent',
+        platform: 'cli',
+        chatType: 'private',
+        chatId: 'recent',
+        createdAt: 1,
+        updatedAt: 1
+      });
+      for (let index = 1; index <= 6; index += 1) {
+        await foundation.messages.insert({
+          messageId: `msg_${String(index)}`,
+          conversationId: 'conv_recent',
+          role: index % 2 === 0 ? 'assistant' : 'user',
+          source: index % 2 === 0 ? 'outbound' : 'inbound',
+          platform: 'cli',
+          text: `history-${String(index)}`,
+          createdAt: index + 1
+        });
+      }
+
+      const executor = createLinnkitGraphRunExecutor({
+        foundation,
+        systemPromptAssembler: createSystemPromptAssembler({ clock: { now: () => 10 } }),
+        historyLimit: 4
+      });
+      await executor.execute({
+        runId: 'run_recent_1',
+        conversationId: 'conv_recent',
+        definition: createLinnsyMainAgentDefinition(),
+        query: 'current request',
+        signal: new AbortController().signal
+      });
+
+      const visibleContent = capturedMessages.at(-1)?.map((message) => message.content).join('\n') ?? '';
+      expect(visibleContent).not.toContain('history-1');
+      expect(visibleContent).not.toContain('history-2');
+      expect(visibleContent).toContain('history-3');
+      expect(visibleContent).toContain('history-6');
+      expect(visibleContent).toContain('current request');
+    } finally {
+      foundation.dispose();
+      await rm(home, { recursive: true, force: true });
+    }
+  });
+
   test('injects system-event fences without mutating the system prompt', async () => {
     const home = await createTempLinnsyHome();
     const capturedMessages: AiMessage[][] = [];

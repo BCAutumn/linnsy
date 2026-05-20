@@ -16,6 +16,7 @@ import { createCurrentTimeTurnContextFence } from '../context-engineering/turn-c
 import type { SystemPromptAssemblerPort } from '../system-prompt/types.js';
 import { DEFAULT_SHAPING_VERSION } from '../system-prompt/system-prompt-assembler.js';
 import type { RunExecutionContext } from '../run-spawner/types.js';
+import { createLinnsyAgentSpec } from '../agents/linnkit-agent-spec.js';
 
 import type { RunExecutorEventPort, RunExecutorFoundationDeps } from './types.js';
 import { createStreamCollectorSink } from './stream-answer.js';
@@ -37,7 +38,7 @@ export async function prepareRunInvocation(input: {
   context: RunExecutionContext;
   foundation: RunExecutorFoundationDeps;
   systemPromptAssembler: SystemPromptAssemblerPort;
-  historyLimit: number;
+  historyLimit?: number;
   events?: RunExecutorEventPort;
 }): Promise<PreparedRunInvocation> {
   // 这里是单次 run 的“入场材料”边界：准备模型能看到的输入，但不执行 graph。
@@ -64,6 +65,7 @@ export async function prepareRunInvocation(input: {
       : { shapingVersion: `${DEFAULT_SHAPING_VERSION}.memory:${memoryShape.shapingVersionSuffix}` }),
     ...createSystemPromptShapingInput(memoryShape)
   }).systemPrompt;
+  const agentSpec = createLinnsyAgentSpec(input.context.definition);
   const contextFences = [
     createCurrentTimeTurnContextFence(input.foundation.clock),
     ...createMemoryContextFences(memoryRecall),
@@ -74,7 +76,7 @@ export async function prepareRunInvocation(input: {
     conversationId: input.context.conversationId,
     systemPrompt,
     query: input.context.query,
-    limit: input.historyLimit,
+    ...(input.historyLimit === undefined ? {} : { limit: input.historyLimit }),
     skipStoredMessages: input.context.ephemeral?.skipMemory === true,
     includeCurrentUserRequest: shouldAppendCurrentUserRequest(input.context.wakeSource)
   });
@@ -88,6 +90,7 @@ export async function prepareRunInvocation(input: {
     availableTools: [...input.context.definition.toolPolicy.allowedToolIds],
     conversationHistory,
     systemPrompt,
+    contextPolicy: agentSpec.contextPolicy,
     runId: input.context.runId,
     ...(input.context.wakeSource === undefined ? {} : { wakeSource: input.context.wakeSource }),
     ...(definitionMaxSteps === undefined ? {} : { maxSteps: definitionMaxSteps }),

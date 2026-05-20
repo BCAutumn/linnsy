@@ -57,6 +57,8 @@ export class SqliteMessageStore implements MessageStorePort {
   private readonly findByProviderMessageStatement: Database.Statement<[string, string], MessageRow>;
   private readonly findLatestInboundTargetStatement: Database.Statement<[string], InboundTargetRow>;
   private readonly listByRunIdStatement: Database.Statement<[string], MessageRow>;
+  private readonly listRecentLimitedByConversationStatement: Database.Statement<[string, number], MessageRow>;
+  private readonly listAllByConversationStatement: Database.Statement<[string], MessageRow>;
 
   public constructor(private readonly db: Database.Database) {
     this.insertStatement = db.prepare(
@@ -183,6 +185,55 @@ export class SqliteMessageStore implements MessageStorePort {
        WHERE run_id = ?
        ORDER BY created_at ASC, message_id ASC`
     );
+    this.listRecentLimitedByConversationStatement = db.prepare<[string, number], MessageRow>(
+      `SELECT *
+       FROM (
+         SELECT
+           message_id,
+           conversation_id,
+           role,
+           source,
+           platform,
+           chat_type,
+           chat_id,
+           provider_message_id,
+           text,
+           attachments_json,
+           tool_calls_json,
+           tool_result_json,
+           reply_to_id,
+           run_id,
+           metadata_json,
+           created_at
+         FROM messages
+         WHERE conversation_id = ?
+         ORDER BY created_at DESC, message_id DESC
+         LIMIT ?
+       )
+       ORDER BY created_at ASC, message_id ASC`
+    );
+    this.listAllByConversationStatement = db.prepare<[string], MessageRow>(
+      `SELECT
+         message_id,
+         conversation_id,
+         role,
+         source,
+         platform,
+         chat_type,
+         chat_id,
+         provider_message_id,
+         text,
+         attachments_json,
+         tool_calls_json,
+         tool_result_json,
+         reply_to_id,
+         run_id,
+         metadata_json,
+         created_at
+       FROM messages
+       WHERE conversation_id = ?
+       ORDER BY created_at ASC, message_id ASC`
+    );
   }
 
   public insert(record: MessageRecord): Promise<void> {
@@ -283,6 +334,16 @@ export class SqliteMessageStore implements MessageStorePort {
     }
 
     return Promise.resolve(result);
+  }
+
+  public listRecentByConversation(
+    conversationId: string,
+    options: Pick<ListMessagesOptions, 'limit'> = {}
+  ): Promise<MessageRecord[]> {
+    const rows = options.limit === undefined
+      ? this.listAllByConversationStatement.all(conversationId)
+      : this.listRecentLimitedByConversationStatement.all(conversationId, options.limit);
+    return Promise.resolve(rows.map(toMessageRecord));
   }
 
   private runInsert(

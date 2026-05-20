@@ -32,7 +32,7 @@
 
 `features/internal-subagent/` 只承接内部子 agent 委派执行。它依赖 Task domain 的 `TaskTrackerPort`、Conversation store 的 child conversation 写口、Agent-run run-spawner 的 `spawnDetached/waitForTerminal` 窄口，以及生产装配传入的 `InternalSubAgentEventPort`；不直接依赖 event hub 具体实现、不管理外部 Codex/Claude Code/Cursor，也不决定工具白名单或模型上下文。
 
-`features/run-executor/` 只承接已经启动的 run 如何执行。它依赖 Agent-run 自己的 agents / system-prompt / context-engineering / run-spawner 契约、Memory domain 的 recall 能力、LLM domain 的 model registry / provider routing 能力，以及生产装配传入的 `RunExecutorEventPort` / `RunContextAuditPort`；不直接依赖 event hub 或 audit manager 具体实现，不启动 detached run，不决定 task terminal wake，也不把具体业务工具实现搬进来。
+`features/run-executor/` 只承接已经启动的 run 如何执行。它依赖 Agent-run 自己的 agents / system-prompt / context-engineering / run-spawner 契约、Memory domain 的 recall 能力、LLM domain 的 model registry / provider routing 能力，以及生产装配传入的 `RunExecutorEventPort` / `RunContextAuditPort`；不直接依赖 event hub 或 audit manager 具体实现，不启动 detached run，不决定 task terminal wake，也不把具体业务工具实现搬进来。对话历史由 host 从 MessageStore 读取“最近窗口”并按时间正序交给 linnkit；token 预算、must-keep fence 与工具历史压缩继续由 linnkit `contextPolicy` 统一裁剪，避免 host 先截掉最新上下文。
 
 `features/tool-runtime/` 只承接 LLM 可调用工具的注册、执行、结果协议和工具生命周期事件。它依赖 Cron / Task / Memory / Conversation domain 的公开 contract 完成具体业务动作，依赖生产装配传入的 `ToolRuntimeEventPort` 和 `ToolResultStorePort` 发布事件与落超长 observation；不直接依赖 event hub 具体实现、不直接绑定 file result store 具体类，也不把 task / cron / memory 的业务规则搬进 Agent-run。
 
