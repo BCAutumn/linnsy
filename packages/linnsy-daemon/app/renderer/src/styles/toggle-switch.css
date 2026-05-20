@@ -1,0 +1,50 @@
+/*
+ * 通用开关 · 对齐 Linnya 设置面板的 36×20 胶囊样式。
+ * 组件本体仍用 button[role="switch"]，避免为了视觉一致性牺牲交互语义。
+ */
+.toggle-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex: none;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-border-strong);
+  cursor: pointer;
+  transition: background-color .4s, box-shadow .3s ease, opacity .2s ease;
+}
+
+.toggle-switch[aria-checked="true"] {
+  background: var(--color-primary);
+  box-shadow: var(--toggle-track-checked-shadow);
+}
+
+.toggle-switch:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.toggle-switch:focus-visible {
+  outline: 2px solid var(--color-primary-soft);
+  outline-offset: 2px;
+}
+
+.toggle-switch span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  display: block;
+  border-radius: 8px;
+  background: var(--toggle-thumb-color);
+  box-shadow: var(--toggle-thumb-shadow);
+  transform: translateX(0);
+  transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-switch[aria-checked="true"] span {
+  transform: translateX(16px);
+}

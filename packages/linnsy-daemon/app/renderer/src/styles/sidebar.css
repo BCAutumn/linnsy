@@ -1,0 +1,398 @@
+.linnsy-sidebar .fluent-icon {
+  width: var(--sidebar-icon-size);
+  height: var(--sidebar-icon-size);
+}
+
+.linnsy-sidebar {
+  --sidebar-control-x: 10px;
+  --sidebar-item-gap: 8px;
+  --sidebar-item-min-height: 34px;
+  --sidebar-item-padding-y: 7px;
+  --sidebar-item-padding-x: 8px;
+  --conversation-meta-height: 16px;
+  --conversation-time-optical-y: 0.5px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+  background: var(--color-bg-elevated);
+  border-right: 0.5px solid var(--color-border);
+}
+
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  bottom: 0;
+  z-index: 20;
+  width: 6px;
+  cursor: ew-resize;
+  -webkit-app-region: no-drag;
+}
+
+.sidebar-resize-handle::after {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-primary-soft-hover);
+  content: "";
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.sidebar-resize-handle:hover::after,
+.sidebar-resize-handle:focus-visible::after,
+.is-sidebar-resizing .sidebar-resize-handle::after {
+  opacity: 1;
+}
+
+.is-sidebar-resizing,
+.is-sidebar-resizing * {
+  cursor: ew-resize !important;
+  user-select: none;
+}
+
+.sidebar-titlebar,
+.main-topbar {
+  height: 38px;
+  flex: none;
+  -webkit-app-region: drag;
+}
+
+.sidebar-titlebar {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+}
+
+.sidebar-pane {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.sidebar-actions {
+  padding: 0 var(--sidebar-control-x) 4px;
+}
+
+.new-conv-btn {
+  width: 100%;
+  min-height: var(--sidebar-item-min-height);
+  padding: var(--sidebar-item-padding-y) var(--sidebar-item-padding-x);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--sidebar-action-color);
+  display: flex;
+  align-items: center;
+  gap: var(--sidebar-item-gap);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.new-conv-btn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.search-wrap {
+  min-height: var(--sidebar-item-min-height);
+  margin: 0 var(--sidebar-control-x) 6px;
+  padding: var(--sidebar-item-padding-y) var(--sidebar-item-padding-x);
+  display: flex;
+  align-items: center;
+  gap: var(--sidebar-item-gap);
+  border-radius: var(--radius-sm);
+}
+
+.search-wrap input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-fg);
+  cursor: default;
+  font-size: 12.5px;
+}
+
+.search-wrap input:disabled {
+  opacity: 1;
+}
+
+.search-wrap input::placeholder {
+  color: var(--color-fg-subtle);
+}
+
+.search-ic {
+  position: static;
+  color: var(--sidebar-action-color);
+  pointer-events: none;
+}
+
+.sidebar-section-label {
+  color: var(--color-fg-subtle);
+  font-size: 10.5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sidebar-section-label {
+  padding: 10px calc(var(--sidebar-control-x) + var(--sidebar-item-padding-x)) 3px;
+}
+
+.conversation-list,
+.settings-tabs-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px var(--sidebar-control-x) 8px;
+}
+
+.conv-item {
+  position: relative;
+  width: 100%;
+  min-height: var(--sidebar-item-min-height);
+  border-radius: var(--radius-sm);
+  color: var(--color-fg-muted);
+}
+
+.conv-item-main {
+  width: 100%;
+  min-height: var(--sidebar-item-min-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: var(--sidebar-item-padding-y) var(--sidebar-item-padding-x);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+
+.conv-item:hover .conv-item-main {
+  background: var(--color-surface-hover);
+}
+
+/* 兼容新旧结构：激活会话高亮始终跟用户气泡一致（primary-soft），避免主题断层。 */
+.conv-item.active,
+.conv-item.active .conv-item-main {
+  background: var(--color-primary-soft);
+}
+
+.conv-item--terminal-bound {
+  color: var(--color-fg);
+}
+
+.conv-item.active .conv-title {
+  color: var(--color-fg);
+}
+
+.conv-title {
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.conv-time {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: var(--conversation-meta-height);
+  color: var(--color-fg-subtle);
+  font-size: 10.5px;
+  line-height: var(--conversation-meta-height);
+  transform: translateY(var(--conversation-time-optical-y));
+}
+
+/* 右侧时间是小字号；固定行盒高度并做轻微视觉下沉，避免字形中心看起来比手机图标偏上。 */
+.conv-meta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--conversation-meta-height);
+  line-height: 1;
+  min-width: 0;
+}
+
+.conv-terminal-icon {
+  color: var(--color-accent);
+}
+
+.conv-pin-icon {
+  color: var(--color-accent);
+}
+
+.linnsy-sidebar .conv-terminal-icon,
+.linnsy-sidebar .conv-pin-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.conv-more-btn {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-fg-muted);
+  opacity: 0;
+  transform: translateY(-50%);
+}
+
+.conv-item:hover .conv-more-btn,
+.conv-item:focus-within .conv-more-btn,
+.conv-more-btn[aria-expanded="true"] {
+  background: var(--color-surface-hover);
+  opacity: 1;
+}
+
+.conv-item:hover .conv-time,
+.conv-item:focus-within .conv-time,
+.conv-item:has(.conv-more-btn[aria-expanded="true"]) .conv-time {
+  opacity: 0;
+}
+
+.conv-item.active:hover .conv-more-btn,
+.conv-item.active:focus-within .conv-more-btn,
+.conv-item.active .conv-more-btn[aria-expanded="true"] {
+  background: var(--color-primary-soft);
+}
+
+.conv-item .conv-more-btn:hover,
+.conv-item .conv-more-btn[aria-expanded="true"] {
+  background: var(--color-primary-soft-hover);
+  color: var(--color-fg);
+}
+
+.conv-item.active .conv-more-btn:hover,
+.conv-item.active .conv-more-btn[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--color-primary-soft-hover) 82%, var(--color-primary) 18%);
+  color: var(--color-fg);
+}
+
+.conv-more-menu {
+  padding: 5px;
+}
+
+.conv-more-menu-item {
+  min-height: 30px;
+}
+
+.conv-delete-dialog-text {
+  margin: 0;
+  color: var(--color-fg-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* 重命名只需要短文本输入，弹窗比默认 dialog 收窄；输入框继续复用 TextField。 */
+.app-dialog.conversation-rename-dialog {
+  width: min(280px, calc(100vw - 32px));
+}
+
+.conversation-rename-field .text-field-control {
+  border-color: var(--color-border);
+  background: var(--color-bg-sunken);
+}
+
+.conversation-rename-field .text-field-control:focus-within {
+  background: var(--color-bg-sunken);
+}
+
+.empty-sidebar-text {
+  padding: 8px;
+  color: var(--color-fg-subtle);
+  font-size: 12px;
+}
+
+.sidebar-bottom {
+  flex: none;
+  padding: 6px var(--sidebar-control-x) 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.sidebar-inline-nav {
+  display: grid;
+  gap: 3px;
+  padding: 0 var(--sidebar-control-x) 4px;
+}
+
+.settings-tabs-nav {
+  padding: 0 var(--sidebar-control-x) 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sidebar-nav-link,
+.settings-back-link,
+.tab-btn {
+  width: 100%;
+  min-height: var(--sidebar-item-min-height);
+  display: flex;
+  align-items: center;
+  gap: var(--sidebar-item-gap);
+  padding: var(--sidebar-item-padding-y) var(--sidebar-item-padding-x);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-fg-muted);
+  text-align: left;
+  font-size: 13px;
+  line-height: 16px;
+  text-decoration: none;
+}
+
+.settings-back-link {
+  margin-bottom: 3px;
+}
+
+/* 侧栏 nav 类按钮的 hover 用中性 surface-hover，比 selected 的主题色浅一档。 */
+.sidebar-nav-link:hover,
+.settings-back-link:hover,
+.tab-btn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.sidebar-nav-link.active,
+.tab-btn.active {
+  background: var(--color-surface-selected);
+  color: var(--color-fg);
+  font-weight: 500;
+}

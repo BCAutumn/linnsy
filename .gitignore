@@ -1,0 +1,51 @@
+# 依赖
+node_modules/
+.pnp.*
+.yarn/
+
+# 构建产物
+dist/
+dist-electron/
+build/
+out/
+*.tsbuildinfo
+
+# 测试 / 覆盖率
+coverage/
+.nyc_output/
+.vitest/
+
+# 环境变量与密钥
+.env
+.env.*
+!.env.example
+.npmrc
+!.npmrc.example
+!packages/linnsy-daemon/.npmrc
+
+# 日志
+*.log
+logs/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/settings.recommended.json
+.idea/
+
+# Sprint 期间临时产物
+tmp/
+.cache/
+.turbo/
+.parcel-cache/
+
+# 本地私有研发资料，不进入公开仓
+.private/
+.agents/
+.cursor/
+
+# 运行时本地状态（linnsy doctor / SQLite 等）
+*.sqlite
+*.sqlite-journal
+*.db

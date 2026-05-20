@@ -1,0 +1,78 @@
+.wechat-qr-dialog {
+  width: min(420px, calc(100vw - 32px));
+}
+
+.wechat-qr-dialog-body {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  padding: 10px 18px 20px;
+}
+
+.wechat-qr-card {
+  position: relative;
+  width: min(260px, 72vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border: 0.5px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 96%), rgb(255 255 255 / 92%)),
+    var(--color-surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.wechat-qr-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.wechat-qr-expired-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  border: 0;
+  background: rgb(255 255 255 / 86%);
+  color: #18211d;
+  cursor: pointer;
+  text-align: center;
+}
+
+.wechat-qr-expired-overlay:disabled {
+  cursor: progress;
+  opacity: .72;
+}
+
+.wechat-qr-expired-overlay span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.wechat-qr-expired-overlay small {
+  color: rgb(24 33 29 / 72%);
+  font-size: 12px;
+}
+
+.wechat-qr-dialog-body p {
+  max-width: 32ch;
+  margin: 0;
+  color: var(--color-fg-muted);
+  font-size: 13px;
+  line-height: 1.65;
+  text-align: center;
+}
+
+[data-mode="dark"] .wechat-qr-card {
+  border-color: color-mix(in srgb, var(--color-border) 78%, transparent);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 98%), rgb(245 248 246 / 94%)),
+    #fff;
+}

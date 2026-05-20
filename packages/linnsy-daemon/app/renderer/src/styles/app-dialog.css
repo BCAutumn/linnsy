@@ -1,0 +1,155 @@
+.app-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--overlay-backdrop);
+  backdrop-filter: blur(10px);
+  animation: app-dialog-backdrop-enter 160ms ease both;
+}
+
+.app-dialog-backdrop--closing {
+  pointer-events: none;
+  animation: app-dialog-backdrop-leave 160ms ease both;
+}
+
+.app-dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 0.5px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg);
+  box-shadow: var(--shadow-dialog);
+  animation: app-dialog-enter 160ms ease both;
+  will-change: opacity;
+}
+
+.app-dialog--closing {
+  animation: app-dialog-leave 160ms ease both;
+}
+
+.app-dialog--lg {
+  width: min(860px, calc(100vw - 32px));
+  height: min(760px, calc(100vh - 32px));
+}
+
+.app-dialog-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px 8px;
+}
+
+.app-dialog-header strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13.5px;
+  font-weight: 650;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-dialog-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-dialog-close {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-fg-muted);
+}
+
+.app-dialog-close:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.app-dialog-body {
+  min-height: 0;
+  padding: 8px 12px 10px;
+  overflow: auto;
+}
+
+.app-dialog-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+  padding: 0 12px 12px;
+}
+
+.app-dialog-footer > .action-buttons-container {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+@media (max-width: 760px) {
+  .app-dialog-header,
+  .app-dialog-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .app-dialog-header-actions {
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-dialog-backdrop,
+  .app-dialog-backdrop--closing,
+  .app-dialog,
+  .app-dialog--closing {
+    animation: none;
+  }
+}
+
+@keyframes app-dialog-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes app-dialog-backdrop-leave {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes app-dialog-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes app-dialog-leave {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

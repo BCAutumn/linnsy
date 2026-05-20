@@ -1,0 +1,34 @@
+/*
+ * Renderer 样式聚合入口
+ * ───────────────────────────────────────────────────────────────────────
+ * 加载顺序：
+ *   1. tokens / themes  ── 颜色与变量原始数据
+ *   2. base             ── reset / 字号 / 通用工具类
+ *   3. layout / sidebar / chat / custom-select / text-field / dialog / form controls / settings / onboarding
+ *
+ * 颜色或主题相关改动请先看 docs/04b-frontend-design-spec.md §2，再改 tokens/themes。
+ */
+
+@import "./tokens.css";
+@import "./themes.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./sidebar.css";
+@import "./chat.css";
+@import "./chat-items.css";
+@import "./custom-select.css";
+@import "./text-field.css";
+@import "./app-dialog.css";
+@import "./settings-range.css";
+@import "./toggle-switch.css";
+@import "./settings.css";
+@import "./codex-recent-threads.css";
+@import "./scheduled.css";
+@import "./simple-date-picker.css";
+@import "./time-picker.css";
+@import "./custom-number-input.css";
+@import "./wechat-qr.css";
+@import "./wechat-delete-dialog.css";
+@import "./onboarding.css";
+@import "./theme-decorations.css";
+@import "./hover-tooltip.css";

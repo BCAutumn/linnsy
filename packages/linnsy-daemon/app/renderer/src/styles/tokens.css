@@ -1,0 +1,250 @@
+/*
+ * 颜色与基础 token · 权威设计源
+ * ───────────────────────────────────────────────────────────────────────
+ * 改 token 之前先看 docs/04b-frontend-design-spec.md §2，再改这里；
+ * 主题色（15 套）在 ./themes.css 单独维护，这里只放语义层。
+ *
+ * Token 分 9 组：
+ *   1. 表面 (Surface)        2. 文字 (Foreground)
+ *   3. 边界 (Border)         4. 主题色原始 (Primary)
+ *   5. 交互态别名 (Interaction，核心收口)
+ *   6. 状态色 (Status，主题独立)
+ *   7. 装饰层 (Effect / Shadow / Overlay)
+ *   8. 组件级别名 (Component)
+ *   9. 排版与形状 (Typography / Shape)
+ *
+ * 业务 CSS 一律消费这里的 token，禁止再现场写 #hex 或 rgba(...)（除非
+ * 是组件局部 scope 的临时变量，例如 .settings-range-input 的 thumb 阴影）。
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ═══ 1. 表面 (Surface) ═══
+   * 浅色四档（明度递增）：bg → elevated → floating → 纯白；
+   * elevated 是侧栏 / 设置卡片 / 文本框 / 下拉等"嵌入式抬高"用，floating 是
+   * Composer / 记忆预览卡这类"悬浮式抬高"用，比 elevated 再亮一档。 */
+  --color-bg: #FFFFFF;
+  --color-bg-elevated: #FAFBFC;
+  --color-bg-floating: #FFFFFF;
+  --color-bg-sunken: #F2F5F9;
+
+  /* ═══ 2. 文字 (Foreground) ═══ */
+  --color-fg: #111111;
+  --color-fg-muted: #595959;
+  --color-fg-subtle: #8C8C8C;
+  --color-fg-on-primary: #FFFFFF;
+
+  /* ═══ 3. 边界 (Border) ═══ */
+  --color-border: #E3E8EF;
+  --color-border-strong: #C6D0DD;
+
+  /* ═══ 4. 主题色原始 (Primary) ═══ */
+  --color-primary: #1A73E8;
+  --color-primary-soft: #E8F0FE;
+  --color-primary-strong: #1558B0;
+
+  /* ═══ 5. 交互态别名 (Interaction) ═══
+   * 默认值只服务无 .linnsy-window 包裹的兜底场景；真实主题窗口会在下方
+   * .linnsy-window 重新派生，避免别名在 :root 先按默认蓝色解析后被继承。
+   */
+  --color-surface-hover: color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-elevated));
+  --color-surface-selected: var(--color-primary-soft);
+  --color-primary-hover: var(--color-primary-strong);
+  --color-primary-soft-hover: color-mix(in srgb, var(--color-primary-soft) 92%, var(--color-primary) 8%);
+
+  /* ═══ 6. 状态色 (Status，主题独立，永不被 theme 覆盖) ═══ */
+  --color-success: #21A675;
+  --color-success-dot: #19C869;
+  --color-error: #E5414B;
+  --color-error-fg: #8E2C34;
+  --color-error-bg: rgba(196, 72, 81, .13);
+  --color-danger-action: #E5414B;
+  --color-danger-action-hover: #D33A44;
+  --color-danger-action-fg: #FFFFFF;
+  --color-neutral-action: #F0F3F6;
+  --color-neutral-action-hover: #E6EBF0;
+  --color-neutral-action-fg: #2F363C;
+  --color-neutral-action-border: #C6D0DD;
+
+  /* ═══ 7. 装饰层 (Effect) ═══ */
+  --overlay-backdrop: rgba(13, 18, 26, .32);
+  --shadow-card: 0 12px 34px rgba(20, 28, 38, .05);
+  --shadow-card-hover: 0 16px 38px rgba(20, 28, 38, .08);
+  --shadow-popover:
+    0 14px 28px -9px rgba(0, 0, 0, .10),
+    0 2px 4px -1px rgba(0, 0, 0, .06),
+    0 -2px 4px -1px rgba(0, 0, 0, .04),
+    0 0 0 .5px rgba(84, 72, 49, .08);
+  --shadow-dialog: 0 24px 70px rgba(8, 13, 21, .22);
+  --shadow-segmented-shell:
+    inset 0 .75px .75px rgba(17, 24, 39, .014),
+    inset 0 1.5px 2px rgba(17, 24, 39, .006),
+    0 0 0 .5px rgba(17, 24, 39, .008);
+  --shadow-segmented-active: 0 1px 2px rgba(0, 0, 0, .06);
+  --shadow-onboarding: 0 4px 20px rgba(0, 0, 0, .07);
+  --composer-shadow:
+    0 0 0 0.5px rgba(0,0,0,.09),
+    0 1px 3px rgba(0,0,0,.05),
+    0 4px 14px rgba(0,0,0,.07);
+  --composer-focus-depth-shadow:
+    0 1px 3px rgba(0,0,0,.05),
+    0 4px 14px rgba(0,0,0,.07);
+
+  /* ═══ 8. 组件级别名 (Component) ═══ */
+  --composer-bg: var(--color-bg-floating);
+  --sidebar-action-color: var(--color-fg-muted);
+  --color-segmented-shell-bg: var(--color-bg-sunken);
+  --scrollbar-thumb: rgba(17, 17, 17, 0.24);
+  --scrollbar-thumb-hover: rgba(17, 17, 17, 0.48);
+  --toggle-thumb-color: #FFFFFF;
+  --toggle-track-checked-shadow: inset 0 1px 1.5px rgba(0, 0, 0, .08);
+  --toggle-thumb-shadow:
+    0 .5px 1px rgba(0, 0, 0, .06),
+    0 1px 1.5px rgba(0, 0, 0, .025);
+
+  /* ═══ 9. 排版与形状 ═══ */
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --sidebar-icon-size: 16px;
+}
+
+/* 交互态别名 + 组件别名依赖当前窗口主题色 / 表面，必须在 .linnsy-window 上重新派
+   生。CSS 自定义属性会在定义元素上解析 var()；如果只写在 :root，子级改主题色
+   后继承到的是默认主题算出的别名，侧栏 active / tab / hover 不会跟主题走，Composer
+   背景也会退化为 :root 兜底的 #FFFFFF（即 --color-bg-floating 的默认值）。 */
+.linnsy-window {
+  --color-surface-hover: color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-elevated));
+  --color-surface-selected: var(--color-primary-soft);
+  --color-primary-hover: var(--color-primary-strong);
+  --color-primary-soft-hover: color-mix(in srgb, var(--color-primary-soft) 92%, var(--color-primary) 8%);
+  --composer-bg: var(--color-bg-floating);
+  --sidebar-action-color: var(--color-fg-muted);
+  --color-segmented-shell-bg: var(--color-bg-sunken);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+ * 主题派生：light / auto 模式下，--color-* 从 ./themes.css 的 --theme-*
+ * 拉取每套主题的 5 个浅色值。回退兜底是 distant_sky 的默认色。
+ * ───────────────────────────────────────────────────────────────────── */
+.linnsy-window[data-mode="light"],
+.linnsy-window[data-mode="auto"] {
+  --color-bg: var(--theme-bg-light, #FFFFFF);
+  --color-bg-sunken: var(--theme-bg-sunken-light, #F2F5F9);
+  /* elevated（嵌入式抬高：侧栏 / 文本框 / 卡片）= bg 兑入 40% 白：明度比 bg 高
+     一档、色相从 bg 继承自动跟主题走。优先读 themes.css 的 --theme-bg-elevated-
+     light slot——bg 为纯白的主题（如 distant_sky）必须填该 slot，否则公式会退化
+     为白、与主区同色；其他 14 套带色相主题不填、走公式即可。
+     dark 模式下"亮一档"方向相同但比例更激进，由下方 [data-mode="dark"] 块硬配。 */
+  --color-bg-elevated: var(--theme-bg-elevated-light,
+    color-mix(in srgb, var(--color-bg) 60%, #FFFFFF));
+  /* floating（悬浮式抬高：Composer / 记忆预览卡）= bg 兑入 60% 白：永远比
+     elevated 再亮一档，靠 shadow 和明度共同承担"悬浮"语义。比例不能太靠近白
+     （否则色相被冲淡，主题切换时 Composer 看起来都"差不多白"）。distant_sky
+     下公式落到 #FFFFFF（与主区同色），靠 composer-shadow + 0.5px 边线分层，
+     与 macOS 原生输入框处理白底的方式一致，不需要 slot override。 */
+  --color-bg-floating: color-mix(in srgb, var(--color-bg) 40%, #FFFFFF);
+  --color-primary: var(--theme-primary-light, #1A73E8);
+  --color-primary-soft: var(--theme-primary-soft-light, #E8F0FE);
+  --color-primary-strong: var(--theme-primary-strong-light, #1558B0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+ * 暗色模式：基础语义全量覆盖；主题色拉 --theme-*-dark；
+ * --color-primary-strong 用 color-mix 自动派生（86% primary + 14% 白），
+ * 所以 15 套主题不用各自手配 dark-strong；如某主题视觉不达标，可在
+ * .linnsy-window[data-mode="dark"][data-theme="..."] 单独 override。
+ * ───────────────────────────────────────────────────────────────────── */
+.linnsy-window[data-mode="dark"],
+:root[data-mode="dark"] {
+  color-scheme: dark;
+  --color-bg: #0D1114;
+  --color-bg-elevated: #161C20;
+  --color-bg-floating: #1B2227;
+  --color-bg-sunken: #090D10;
+  /* dark 下 bg-sunken (#090D10) 与 bg (#0D1114) RGB 仅差 4，肉眼几乎不可分辨。
+     seg-control 容器若沿用 sunken 会与设置主区背景塌成一档。改用半透明白覆盖
+     形成 macOS 标准的"在父容器上凹陷"视觉，明度差由 alpha 决定，与下层 bg 无关。 */
+  --color-segmented-shell-bg: rgba(255, 255, 255, 0.04);
+  --color-fg: #E8EDEE;
+  --color-fg-muted: #8A9398;
+  --color-fg-subtle: #545C60;
+  --color-border: #1F282D;
+  --color-border-strong: #2C3840;
+  --color-danger-action: #8F3038;
+  --color-danger-action-hover: #7F2931;
+  --color-danger-action-fg: #F7F1F2;
+  --color-neutral-action: #212A2F;
+  --color-neutral-action-hover: #2A343A;
+  --color-neutral-action-fg: #D5DCDD;
+  --color-neutral-action-border: #3A474F;
+  --composer-shadow:
+    0 0 0 0.5px rgba(255,255,255,.08),
+    0 2px 6px rgba(0,0,0,.4),
+    0 8px 28px rgba(0,0,0,.45);
+  --composer-focus-depth-shadow:
+    0 2px 6px rgba(0,0,0,.4),
+    0 8px 28px rgba(0,0,0,.45);
+  --shadow-segmented-shell:
+    inset 0 1px 1px rgba(0,0,0,.18),
+    inset 0 2px 3px rgba(0,0,0,.04),
+    0 0 0 .5px rgba(255,255,255,.01);
+  --scrollbar-thumb: rgba(232, 237, 238, 0.26);
+  --scrollbar-thumb-hover: rgba(232, 237, 238, 0.52);
+  /* dark 下主题色统一压暗 22%——15 套主题的 --theme-primary-dark 都按"在黑底上
+     跳出"原则选了高明度高饱和值，但作背景填充（按钮 / Toggle 开 / send-btn）时
+     普遍过亮、视觉刺眼。兑入 22% bg-elevated 既保留主题色相、又把饱和度和明度
+     拉回 dark 模式合理区间，与 Material 3 / Apple HIG 暗色品牌色弱化建议一致。
+     仅在 dark 派生层做，不影响 light；text / border / selected 等所有用 primary
+     的场景同步弱化（dark 下文字本就该比 light 柔和）。 */
+  --color-primary: color-mix(in srgb,
+    var(--theme-primary-dark, #8AB4F8) 78%,
+    var(--color-bg-elevated));
+  --color-primary-soft: var(--theme-primary-soft-dark, rgba(138,180,248,.18));
+  --color-primary-strong: color-mix(in srgb, var(--color-primary) 86%, white 14%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .linnsy-window[data-mode="auto"] {
+    color-scheme: dark;
+    --color-bg: #0D1114;
+    --color-bg-elevated: #161C20;
+    --color-bg-floating: #1B2227;
+    --color-bg-sunken: #090D10;
+    --color-segmented-shell-bg: rgba(255, 255, 255, 0.04);
+    --color-fg: #E8EDEE;
+    --color-fg-muted: #8A9398;
+    --color-fg-subtle: #545C60;
+    --color-border: #1F282D;
+    --color-border-strong: #2C3840;
+    --color-danger-action: #8F3038;
+    --color-danger-action-hover: #7F2931;
+    --color-danger-action-fg: #F7F1F2;
+    --color-neutral-action: #212A2F;
+    --color-neutral-action-hover: #2A343A;
+    --color-neutral-action-fg: #D5DCDD;
+    --color-neutral-action-border: #3A474F;
+    --composer-shadow:
+      0 0 0 0.5px rgba(255,255,255,.08),
+      0 2px 6px rgba(0,0,0,.4),
+      0 8px 28px rgba(0,0,0,.45);
+    --composer-focus-depth-shadow:
+      0 2px 6px rgba(0,0,0,.4),
+      0 8px 28px rgba(0,0,0,.45);
+    --shadow-segmented-shell:
+      inset 0 1px 1px rgba(0,0,0,.18),
+      inset 0 2px 3px rgba(0,0,0,.04),
+      0 0 0 .5px rgba(255,255,255,.01);
+    --scrollbar-thumb: rgba(232, 237, 238, 0.26);
+    --scrollbar-thumb-hover: rgba(232, 237, 238, 0.52);
+    /* 见上方 [data-mode="dark"] 块的"dark 下主题色统一压暗"说明。 */
+    --color-primary: color-mix(in srgb,
+      var(--theme-primary-dark, #8AB4F8) 78%,
+      var(--color-bg-elevated));
+    --color-primary-soft: var(--theme-primary-soft-dark, rgba(138,180,248,.18));
+    --color-primary-strong: color-mix(in srgb, var(--color-primary) 86%, white 14%);
+  }
+}

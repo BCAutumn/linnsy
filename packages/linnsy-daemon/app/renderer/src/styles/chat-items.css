@@ -1,0 +1,610 @@
+/*
+ * S3 渲染层：4 种新气泡的样式 —— 工具卡 / 子 agent 汇报 / 系统事件 / 主人插话。
+ *
+ * 设计原则：
+ *   1) 沿用 tokens.css 的 CSS variable，不硬编码颜色（适配深浅主题 + 紫罗兰/胭脂等多主题）
+ *   2) "对话即观察台"：辅助信息默认低视觉权重（折叠 / 灰阶 / 小尺寸），不抢主聊天的焦点
+ *   3) 类名沿用 .message + 子修饰符模式，不重写消息流的 max-width / margin
+ */
+
+/* ─── Assistant 思考链（S5.0） ───────────────────────────────────────────── */
+
+.assistant-thought {
+  --assistant-thought-rail-offset: 6px;
+  margin: 0 0 8px;
+  color: color-mix(in srgb, var(--color-fg-subtle) 78%, transparent);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.message--thought-only .assistant-thought {
+  margin-bottom: 0;
+}
+
+.assistant-thought__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  margin-left: calc(-1 * var(--assistant-thought-rail-offset));
+  min-height: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--color-fg-subtle) 78%, transparent);
+  font: inherit;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  transition: color 140ms ease;
+}
+
+.assistant-thought__toggle:hover {
+  color: var(--color-fg-subtle);
+}
+
+.assistant-thought__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.assistant-thought__chevron {
+  color: currentColor;
+  transform: rotate(0deg);
+  transition: transform 140ms ease;
+}
+
+.assistant-thought__toggle--expanded .assistant-thought__chevron {
+  transform: rotate(90deg);
+}
+
+.assistant-thought__summary {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: currentColor;
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.assistant-thought__body {
+  margin: 0;
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--color-border);
+}
+
+.assistant-thought__chunk + .assistant-thought__chunk {
+  margin-top: 6px;
+}
+
+/* ─── 工具卡（ToolCallCard） ──────────────────────────────────────────────── */
+
+.message.tool-call {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 3px 0;
+  text-align: left;
+}
+
+.message.tool-call.message--entering {
+  animation: linnsy-tool-card-enter 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes linnsy-tool-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .message.tool-call.message--entering {
+    animation: none;
+  }
+}
+
+.tool-card-wrapper {
+  width: 100%;
+}
+
+.tool-card-wrapper--full-width {
+  max-width: none;
+}
+
+.tool-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  font-size: 12.5px;
+  overflow: hidden;
+}
+
+.tool-card-wrapper--no-border .tool-card {
+  border: none;
+}
+
+.tool-card-wrapper--no-bg .tool-card {
+  background: transparent;
+}
+
+.tool-card-wrapper--no-padding .tool-card__body {
+  padding: 0;
+}
+
+.tool-inline-notice {
+  padding: 2px 0;
+  color: color-mix(in srgb, var(--color-fg-subtle) 78%, transparent);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.tool-inline-notice__text {
+  overflow-wrap: anywhere;
+}
+
+.tool-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.tool-card__header:hover {
+  background: var(--color-surface-hover);
+}
+
+.tool-card__status {
+  display: inline-block;
+  min-width: 48px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm, 4px);
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.tool-card__status--running {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+}
+
+.tool-card__status--success {
+  background: color-mix(in srgb, var(--color-success) 15%, transparent);
+  color: var(--color-success);
+}
+
+.tool-card__status--error,
+.tool-card__status--blocked {
+  background: var(--color-error-bg);
+  color: var(--color-error-fg);
+}
+
+.tool-card__name {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-card__duration {
+  font-size: 11px;
+  color: var(--color-fg-subtle);
+  flex-shrink: 0;
+}
+
+.tool-card__chevron {
+  color: var(--color-fg-subtle);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.tool-card__body {
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-card__section h4 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tool-card__section--error h4 {
+  color: var(--color-error-fg);
+}
+
+.tool-card__progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 6px 8px;
+  list-style: none;
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-sm, 4px);
+}
+
+.tool-card__progress-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 0;
+  color: var(--color-fg-muted);
+  line-height: 1.45;
+}
+
+.tool-card__progress-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  background: var(--color-fg-subtle);
+}
+
+.tool-card__progress-dot--loading {
+  background: var(--color-primary-strong);
+}
+
+.tool-card__progress-dot--success {
+  background: var(--color-success);
+}
+
+.tool-card__progress-dot--error {
+  background: var(--color-error-fg);
+}
+
+.tool-card__progress-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tool-card__pre {
+  margin: 0;
+  padding: 6px 8px;
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-sm, 4px);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--color-fg);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.tool-card__error-kind {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--color-fg-subtle);
+}
+
+/* ─── Codex 可见接管工具卡 ─────────────────────────────────────────────── */
+
+.codex-task-card__summary {
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.codex-task-card__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-fg);
+  overflow-wrap: anywhere;
+}
+
+.codex-task-card__meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-fg-subtle);
+  overflow-wrap: anywhere;
+}
+
+.codex-task-card__preview {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--color-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.codex-task-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.codex-task-card__action {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-bg-elevated);
+  color: var(--color-fg);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.codex-task-card__action:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+}
+
+.codex-task-card__action:disabled {
+  cursor: not-allowed;
+  color: var(--color-fg-subtle);
+  opacity: 0.68;
+}
+
+.codex-task-card__hint {
+  font-size: 11.5px;
+  color: var(--color-fg-subtle);
+  overflow-wrap: anywhere;
+}
+
+.codex-task-card__hint--error {
+  color: var(--color-error-fg);
+}
+
+.codex-task-card__details {
+  margin: 0;
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 5px 10px;
+  font-size: 12px;
+}
+
+.codex-task-card__details dt {
+  color: var(--color-fg-subtle);
+}
+
+.codex-task-card__details dd {
+  margin: 0;
+  color: var(--color-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+.codex-task-card__details code {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* ─── 子 agent 汇报（SubagentSummary） ───────────────────────────────────── */
+
+.message.subagent-summary {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 32px;
+}
+
+.subagent-summary__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--color-fg-muted);
+}
+
+.subagent-summary__avatar {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.subagent-summary__label {
+  font-weight: 500;
+}
+
+.subagent-summary__task {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-fg-subtle);
+}
+
+.subagent-summary__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 2px 0 0;
+  padding: 0 0 0 22px;
+  list-style: none;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+}
+
+.subagent-summary__progress-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  line-height: 1.45;
+}
+
+.subagent-summary__progress-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  background: var(--color-fg-subtle);
+}
+
+.subagent-summary__progress-dot--loading {
+  background: var(--color-primary-strong);
+}
+
+.subagent-summary__progress-dot--success {
+  background: var(--color-success);
+}
+
+.subagent-summary__progress-dot--error {
+  background: var(--color-error-fg);
+}
+
+.subagent-summary__body {
+  padding: 6px 12px;
+  border-left: 2px solid var(--color-primary-soft);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-fg);
+}
+
+.subagent-summary__pending {
+  color: var(--color-fg-muted);
+}
+
+/* ─── 系统事件（SystemEvent，居中浅灰条） ─────────────────────────────────── */
+
+.message.system-event {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.system-event__line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px;
+  background: var(--color-bg-sunken);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--color-fg-muted);
+}
+
+.system-event__line:hover {
+  background: var(--color-surface-hover);
+}
+
+.system-event__source {
+  font-weight: 500;
+  color: var(--color-fg);
+}
+
+.system-event__detail {
+  color: var(--color-fg-muted);
+  max-width: 480px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.system-event__details {
+  margin: 6px 0 0;
+  padding: 6px 12px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  font-size: 11.5px;
+  color: var(--color-fg-muted);
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  max-width: 480px;
+}
+
+.system-event__details dt {
+  color: var(--color-fg-subtle);
+}
+
+.system-event__details dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--color-fg);
+  word-break: break-all;
+}
+
+.message.system-event--task_execution_notice {
+  margin: 10px auto;
+  padding: 8px 0;
+}
+
+.system-event--task_execution_notice .system-event__line {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+}
+
+.system-event--task_execution_notice .system-event__line:hover {
+  background: transparent;
+}
+
+.system-event--task_execution_notice .system-event__detail {
+  max-width: none;
+}
+
+/* ─── 主人插话（UserInterjection，偏右小标记） ───────────────────────────── */
+
+.message.user-interjection {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 4px 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 11.5px;
+}
+
+.user-interjection__label {
+  padding: 2px 8px;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary-strong);
+  border-radius: 999px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.user-interjection__detail {
+  max-width: 60%;
+  color: var(--color-fg-muted);
+  font-style: italic;
+  overflow-wrap: break-word;
+}

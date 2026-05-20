@@ -1,0 +1,106 @@
+/*
+ * 15 套传统色主题原始变量 · 颜色系统的唯一原始数据源
+ * ───────────────────────────────────────────────────────────────────────
+ * 每套主题声明 5 个浅色 + 3 个暗色变量；窗口和设置页色卡都通过
+ * .linnsy-window[data-theme="..."] 与 .theme-tile[data-theme-option="..."]
+ * 两个选择器同时消费同一组变量（避免 TS 端再抄一份）。
+ *
+ * 可选 slot：--theme-bg-elevated-light（仅 bg=#FFFFFF 的纯白底主题需要填）。
+ * 不填时 tokens.css 走公式 mix(bg 60%, #FFFFFF) 派生 bg-elevated；填了则 override
+ * 公式，用于解决"bg 已封顶为白、公式退化为白、侧栏与主区同色"这种边界情况。
+ *
+ * 主题色派生的语义 token（--color-primary 等）在 ./tokens.css。
+ * 主题中文/英文名称、产品决策依据见 docs/04b-frontend-design-spec.md §2.6。
+ */
+
+.linnsy-window[data-theme="distant_sky"],
+.theme-tile[data-theme-option="distant_sky"] {
+  --theme-bg-light:#FFFFFF; --theme-bg-sunken-light:#F2F5F9;
+  --theme-bg-elevated-light:#FAFBFC;
+  --theme-primary-light:#1A73E8; --theme-primary-soft-light:#E8F0FE; --theme-primary-strong-light:#1558B0;
+  --theme-tile-bg-dark:rgba(138,180,248,.08); --theme-primary-dark:#8AB4F8; --theme-primary-soft-dark:rgba(138,180,248,.18);
+}
+.linnsy-window[data-theme="moon_white"],
+.theme-tile[data-theme-option="moon_white"] {
+  --theme-bg-light:#EEF3FB; --theme-bg-sunken-light:#E3ECF5;
+  --theme-primary-light:#4B5CC4; --theme-primary-soft-light:#D9DFF3; --theme-primary-strong-light:#2E3D9A;
+  --theme-tile-bg-dark:rgba(141,164,232,.08); --theme-primary-dark:#8DA4E8; --theme-primary-soft-dark:rgba(141,164,232,.18);
+}
+.linnsy-window[data-theme="royal_blue"],
+.theme-tile[data-theme-option="royal_blue"] {
+  --theme-bg-light:#EDF1FB; --theme-bg-sunken-light:#E0E6F4;
+  --theme-primary-light:#3D52C0; --theme-primary-soft-light:#D6DEF3; --theme-primary-strong-light:#2A3B98;
+  --theme-tile-bg-dark:rgba(118,145,232,.08); --theme-primary-dark:#7691E8; --theme-primary-soft-dark:rgba(118,145,232,.18);
+}
+.linnsy-window[data-theme="bamboo_ash"],
+.theme-tile[data-theme-option="bamboo_ash"] {
+  --theme-bg-light:#F3F6F4; --theme-bg-sunken-light:#E8EDE9;
+  --theme-primary-light:#6D7871; --theme-primary-soft-light:#E0E6E2; --theme-primary-strong-light:#505A54;
+  --theme-tile-bg-dark:rgba(167,177,171,.08); --theme-primary-dark:#A7B1AB; --theme-primary-soft-dark:rgba(167,177,171,.18);
+}
+.linnsy-window[data-theme="ink_cyan"],
+.theme-tile[data-theme-option="ink_cyan"] {
+  --theme-bg-light:#F0F7F5; --theme-bg-sunken-light:#E1EFEB;
+  --theme-primary-light:#277A6C; --theme-primary-soft-light:#CFE5DF; --theme-primary-strong-light:#18584E;
+  --theme-tile-bg-dark:rgba(92,184,168,.08); --theme-primary-dark:#5CB8A8; --theme-primary-soft-dark:rgba(92,184,168,.18);
+}
+.linnsy-window[data-theme="pine_cypress"],
+.theme-tile[data-theme-option="pine_cypress"] {
+  --theme-bg-light:#F4F8F5; --theme-bg-sunken-light:#EBF2ED;
+  --theme-primary-light:#21A675; --theme-primary-soft-light:#DBF0E6; --theme-primary-strong-light:#057748;
+  --theme-tile-bg-dark:rgba(60,185,133,.08); --theme-primary-dark:#3CB985; --theme-primary-soft-dark:rgba(60,185,133,.18);
+}
+.linnsy-window[data-theme="jade_mist"],
+.theme-tile[data-theme-option="jade_mist"] {
+  --theme-bg-light:#F2FBF6; --theme-bg-sunken-light:#E4F4EB;
+  --theme-primary-light:#4FBE92; --theme-primary-soft-light:#D9F0E5; --theme-primary-strong-light:#2C8E6B;
+  --theme-tile-bg-dark:rgba(123,207,166,.08); --theme-primary-dark:#7BCFA6; --theme-primary-soft-dark:rgba(123,207,166,.18);
+}
+.linnsy-window[data-theme="willow_green"],
+.theme-tile[data-theme-option="willow_green"] {
+  --theme-bg-light:#F6F8EA; --theme-bg-sunken-light:#EBEFD7;
+  --theme-primary-light:#8E9E4F; --theme-primary-soft-light:#E2E8C8; --theme-primary-strong-light:#65712F;
+  --theme-tile-bg-dark:rgba(183,199,111,.08); --theme-primary-dark:#B7C76F; --theme-primary-soft-dark:rgba(183,199,111,.18);
+}
+.linnsy-window[data-theme="autumn_fragrance"],
+.theme-tile[data-theme-option="autumn_fragrance"] {
+  --theme-bg-light:#FAF6E4; --theme-bg-sunken-light:#F2EBCC;
+  --theme-primary-light:#B8990F; --theme-primary-soft-light:#EDE6B3; --theme-primary-strong-light:#826B0B;
+  --theme-tile-bg-dark:rgba(224,189,42,.08); --theme-primary-dark:#E0BD2A; --theme-primary-soft-dark:rgba(224,189,42,.16);
+}
+.linnsy-window[data-theme="amber_yellow"],
+.theme-tile[data-theme-option="amber_yellow"] {
+  --theme-bg-light:#FFF7EA; --theme-bg-sunken-light:#F6E8D3;
+  --theme-primary-light:#F09B22; --theme-primary-soft-light:#F8E1BD; --theme-primary-strong-light:#B86808;
+  --theme-tile-bg-dark:rgba(255,182,77,.08); --theme-primary-dark:#FFB64D; --theme-primary-soft-dark:rgba(255,182,77,.16);
+}
+.linnsy-window[data-theme="tea_brown"],
+.theme-tile[data-theme-option="tea_brown"] {
+  --theme-bg-light:#F8F1EC; --theme-bg-sunken-light:#EFE2D8;
+  --theme-primary-light:#9A7256; --theme-primary-soft-light:#E8D8CC; --theme-primary-strong-light:#6D4F3B;
+  --theme-tile-bg-dark:rgba(198,155,123,.08); --theme-primary-dark:#C69B7B; --theme-primary-soft-dark:rgba(198,155,123,.18);
+}
+.linnsy-window[data-theme="rouge"],
+.theme-tile[data-theme-option="rouge"] {
+  --theme-bg-light:#FAF2F3; --theme-bg-sunken-light:#F2E1E3;
+  --theme-primary-light:#9D2933; --theme-primary-soft-light:#F1D7DA; --theme-primary-strong-light:#6E1C24;
+  --theme-tile-bg-dark:rgba(194,74,85,.08); --theme-primary-dark:#C24A55; --theme-primary-soft-dark:rgba(194,74,85,.18);
+}
+.linnsy-window[data-theme="rosy_red"],
+.theme-tile[data-theme-option="rosy_red"] {
+  --theme-bg-light:#FBF2F3; --theme-bg-sunken-light:#F8E3E5;
+  --theme-primary-light:#D9505A; --theme-primary-soft-light:#F7D8DA; --theme-primary-strong-light:#A83540;
+  --theme-tile-bg-dark:rgba(240,137,144,.08); --theme-primary-dark:#F08990; --theme-primary-soft-dark:rgba(240,137,144,.16);
+}
+.linnsy-window[data-theme="lilac"],
+.theme-tile[data-theme-option="lilac"] {
+  --theme-bg-light:#F7F2FB; --theme-bg-sunken-light:#EEE5F4;
+  --theme-primary-light:#9E5FCC; --theme-primary-soft-light:#EAD8F5; --theme-primary-strong-light:#7235A0;
+  --theme-tile-bg-dark:rgba(199,149,232,.08); --theme-primary-dark:#C795E8; --theme-primary-soft-dark:rgba(199,149,232,.18);
+}
+.linnsy-window[data-theme="dai_purple"],
+.theme-tile[data-theme-option="dai_purple"] {
+  --theme-bg-light:#F3F1F8; --theme-bg-sunken-light:#E9E4F0;
+  --theme-primary-light:#574266; --theme-primary-soft-light:#DDD5E8; --theme-primary-strong-light:#3F2E50;
+  --theme-tile-bg-dark:rgba(156,132,181,.08); --theme-primary-dark:#9C84B5; --theme-primary-soft-dark:rgba(156,132,181,.18);
+}

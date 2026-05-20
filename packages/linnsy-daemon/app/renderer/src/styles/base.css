@@ -1,0 +1,183 @@
+/*
+ * 全局 reset / body / 字号 / fluent-icon / scroll-area
+ * ───────────────────────────────────────────────────────────────────────
+ * 这里只放与具体业务无关的"骨架"样式；颜色 token 在 ./tokens.css。
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  /* macOS / Chromium 下使用灰阶抗锯齿，让中小字号中文更轻、更干净。 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  font: 14px/1.55 -apple-system, "PingFang SC", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  color: var(--color-fg);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-primary-soft);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.linnsy-window {
+  width: 100%;
+  min-width: 900px;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, var(--sidebar-width, 260px)) minmax(0, 1fr);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  overflow: hidden;
+}
+
+.fluent-icon {
+  --icon-size: 20px;
+  display: inline-block;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex: none;
+  background: currentColor;
+  line-height: 1;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  vertical-align: middle;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.fluent-icon--add { mask-image: url("../assets/fluent-icons/add-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/add-20-regular.svg"); }
+.fluent-icon--alert { mask-image: url("../assets/fluent-icons/alert-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/alert-20-regular.svg"); }
+.fluent-icon--apps { mask-image: url("../assets/fluent-icons/apps-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/apps-20-regular.svg"); }
+.fluent-icon--archive { mask-image: url("../assets/fluent-icons/archive-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/archive-20-regular.svg"); }
+.fluent-icon--arrowUp { mask-image: url("../assets/fluent-icons/arrow-up-20-filled.svg"); -webkit-mask-image: url("../assets/fluent-icons/arrow-up-20-filled.svg"); }
+.fluent-icon--bot { mask-image: url("../assets/fluent-icons/bot-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/bot-20-regular.svg"); }
+.fluent-icon--brainCircuit { mask-image: url("../assets/fluent-icons/brain-circuit-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/brain-circuit-20-regular.svg"); }
+.fluent-icon--checkmark { mask-image: url("../assets/fluent-icons/checkmark-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/checkmark-20-regular.svg"); }
+.fluent-icon--chevronLeft { mask-image: url("../assets/fluent-icons/chevron-left-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/chevron-left-20-regular.svg"); }
+.fluent-icon--chevronRight { mask-image: url("../assets/fluent-icons/chevron-right-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/chevron-right-20-regular.svg"); }
+.fluent-icon--clock { mask-image: url("../assets/fluent-icons/clock-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/clock-20-regular.svg"); }
+.fluent-icon--code { mask-image: url("../assets/fluent-icons/code-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/code-20-regular.svg"); }
+.fluent-icon--color { mask-image: url("../assets/fluent-icons/color-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/color-20-regular.svg"); }
+.fluent-icon--copy { mask-image: url("../assets/fluent-icons/copy-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/copy-20-regular.svg"); }
+.fluent-icon--delete { mask-image: url("../assets/fluent-icons/delete-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/delete-20-regular.svg"); }
+.fluent-icon--document { mask-image: url("../assets/fluent-icons/document-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/document-20-regular.svg"); }
+.fluent-icon--dismiss { mask-image: url("../assets/fluent-icons/dismiss-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/dismiss-20-regular.svg"); }
+.fluent-icon--eye { mask-image: url("../assets/fluent-icons/eye-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/eye-20-regular.svg"); }
+.fluent-icon--eyeOff { mask-image: url("../assets/fluent-icons/eye-off-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/eye-off-20-regular.svg"); }
+.fluent-icon--globe { mask-image: url("../assets/fluent-icons/globe-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/globe-20-regular.svg"); }
+.fluent-icon--edit { mask-image: url("../assets/fluent-icons/edit-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/edit-20-regular.svg"); }
+.fluent-icon--moreHorizontal { mask-image: url("../assets/fluent-icons/more-horizontal-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/more-horizontal-20-regular.svg"); }
+.fluent-icon--pause { mask-image: url("../assets/fluent-icons/pause-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/pause-20-regular.svg"); }
+.fluent-icon--pin { mask-image: url("../assets/fluent-icons/pin-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/pin-20-regular.svg"); }
+.fluent-icon--play { mask-image: url("../assets/fluent-icons/play-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/play-20-regular.svg"); }
+.fluent-icon--phone { mask-image: url("../assets/fluent-icons/phone-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/phone-20-regular.svg"); }
+.fluent-icon--search { mask-image: url("../assets/fluent-icons/search-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/search-20-regular.svg"); }
+.fluent-icon--settings { mask-image: url("../assets/fluent-icons/settings-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/settings-20-regular.svg"); }
+.fluent-icon--shield { mask-image: url("../assets/fluent-icons/shield-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/shield-20-regular.svg"); }
+.fluent-icon--taskListLtr { mask-image: url("../assets/fluent-icons/task-list-ltr-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/task-list-ltr-20-regular.svg"); }
+.fluent-icon--textBold { mask-image: url("../assets/fluent-icons/text-bold-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/text-bold-20-regular.svg"); }
+.fluent-icon--textBulletList { mask-image: url("../assets/fluent-icons/text-bullet-list-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/text-bullet-list-20-regular.svg"); }
+.fluent-icon--textHeader2 { mask-image: url("../assets/fluent-icons/text-header-2-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/text-header-2-20-regular.svg"); }
+.fluent-icon--textItalic { mask-image: url("../assets/fluent-icons/text-italic-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/text-italic-20-regular.svg"); }
+.fluent-icon--textNumberList { mask-image: url("../assets/fluent-icons/text-number-list-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/text-number-list-20-regular.svg"); }
+.fluent-icon--textQuote { mask-image: url("../assets/fluent-icons/text-quote-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/text-quote-20-regular.svg"); }
+.fluent-icon--wrench { mask-image: url("../assets/fluent-icons/wrench-20-regular.svg"); -webkit-mask-image: url("../assets/fluent-icons/wrench-20-regular.svg"); }
+
+@property --sa-thumb-color {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+.scroll-area {
+  --sa-thumb-color: transparent;
+  transition: --sa-thumb-color 0.25s ease;
+}
+
+.scroll-area:hover,
+.scroll-area:focus-within {
+  --sa-thumb-color: var(--scrollbar-thumb);
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+  border: 0;
+  background: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: var(--sa-thumb-color);
+  background-clip: content-box;
+}
+
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+.scroll-area.scroll-area--persistent {
+  --sa-thumb-color: var(--scrollbar-thumb);
+  transition: none;
+}
+
+.scroll-area.scroll-area--persistent:hover,
+.scroll-area.scroll-area--persistent:focus-within {
+  --sa-thumb-color: var(--scrollbar-thumb);
+}
+
+.scroll-area.scroll-area--persistent::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+.scroll-area::-webkit-scrollbar-corner {
+  background: transparent;
+}

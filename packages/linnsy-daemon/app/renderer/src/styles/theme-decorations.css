@@ -1,0 +1,123 @@
+/*
+ * 主题专属装饰层 · 仅在指定主题下生效的视觉壳
+ * ───────────────────────────────────────────────────────────────────────
+ * 克制原则（违反任一条 → 不允许加新装饰）：
+ *   1. 必须打 [data-theme="..."] 单主题 scope，不能溢出到其他 14 套主题
+ *   2. 必须打组件/页面 scope，不能给整窗加壁纸
+ *   3. 透明度 ≤ 14%（light）/ ≤ 8%（dark），不抢内容戏
+ *   4. 用 mask-image + 主题色着色，不直接 background-image，确保色相跟主题走
+ *   5. SVG 资源必须是"正空间"（path 区 = 实体形状）。potrace 输出常是
+ *      "画布矩形 - 子路径"的负空间，CSS mask 直接消费会得到"灰底白竹"
+ *      的反相错误。两种修复路径：
+ *        (a) 在 Illustrator / Figma 里手工拆解外矩形与子路径，输出独立
+ *            笔触（推荐，结构干净，bamboo-ash-ink.svg 走的是这条）；
+ *        (b) 在 SVG 内嵌 <mask> 反相（应急，多一层 defs/mask）。
+ *
+ * 新增装饰前先看 docs/04b-frontend-design-spec.md §2.8「主题专属装饰层」。
+ * 设计目标是表达"是一个人不是 Agent"的克制审美痕迹，不是搞主题皮肤商城。
+ */
+
+/* ═══ 竹月灰 · 主内容水墨壁纸 ════════════════════════════════════════════
+ * 仅 [data-theme="bamboo_ash"] 下出现，挂在主内容容器：
+ *   - data-screen="settings"：所有设置 tab 共用一层水墨竹影；
+ *   - data-screen="chat"：主聊天也共用同一层竹影；
+ *   - data-screen="tasks" / "scheduled"：任务管理与定时安排沿用同一层竹影，保持主区一致；
+ *   - 侧栏 / 顶栏不铺，避免从"克制审美痕迹"滑向整窗皮肤。
+ *
+ * 壁纸层放在 .main-wrap，而不是放在 .chat-view 自己身上。聊天区内容很长，
+ * 如果把 ::before 挂在滚动内容里，竹影会跟着 scrollHeight 跑到当前视口外。
+ * .memory-preview-card 额外做轻半透 + backdrop-filter，让竹影从卡片后透出来。
+ * ─────────────────────────────────────────────────────────────────── */
+
+.linnsy-window[data-theme="bamboo_ash"][data-screen="settings"] .main-wrap,
+.linnsy-window[data-theme="bamboo_ash"][data-screen="chat"] .main-wrap,
+.linnsy-window[data-theme="bamboo_ash"][data-screen="tasks"] .main-wrap,
+.linnsy-window[data-theme="bamboo_ash"][data-screen="scheduled"] .main-wrap {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-bg);
+}
+
+.linnsy-window[data-theme="bamboo_ash"][data-screen="settings"] .main-wrap::before,
+.linnsy-window[data-theme="bamboo_ash"][data-screen="chat"] .main-wrap::before,
+.linnsy-window[data-theme="bamboo_ash"][data-screen="tasks"] .main-wrap::before,
+.linnsy-window[data-theme="bamboo_ash"][data-screen="scheduled"] .main-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--color-primary-strong);
+  -webkit-mask-image: url("../assets/themes/bamboo-ash-ink.svg");
+          mask-image: url("../assets/themes/bamboo-ash-ink.svg");
+  -webkit-mask-mode: alpha;
+          mask-mode: alpha;
+  -webkit-mask-position: right bottom;
+          mask-position: right bottom;
+  /* SVG viewBox 528.9×992（瘦长立竹）。让"高度"跟 view 高度走，宽度按
+     比例自适应——竹子从右下扎根、竹梢自然伸到卡片顶部。clamp 限定最小
+     440px（避免在矮窗口里看不见）、最大 920px（避免在 4K 屏被拉成大旗）。 */
+  -webkit-mask-size: auto clamp(440px, 92%, 920px);
+          mask-size: auto clamp(440px, 92%, 920px);
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  /* SVG 自身 fill 已带 opacity .7（叠染区会更浓），CSS 这层再叠 .14，
+     综合视觉强度 ≈ 10%，贴着 light 主题装饰上限走，但仍不抢读区。 */
+  opacity: .06;
+}
+
+.linnsy-window[data-theme="bamboo_ash"][data-screen="settings"] :where(.main-topbar, .settings-view),
+.linnsy-window[data-theme="bamboo_ash"][data-screen="chat"] :where(.main-topbar, .chat-view),
+.linnsy-window[data-theme="bamboo_ash"][data-screen="scheduled"] :where(.main-topbar, .scheduled-view) {
+  position: relative;
+  z-index: 1;
+}
+
+.linnsy-window[data-theme="bamboo_ash"] :where(.settings-view, .chat-view, .scheduled-view) {
+  background: transparent;
+}
+
+.linnsy-window[data-theme="bamboo_ash"][data-mode="dark"][data-screen="settings"] .main-wrap::before,
+.linnsy-window[data-theme="bamboo_ash"][data-mode="dark"][data-screen="chat"] .main-wrap::before,
+.linnsy-window[data-theme="bamboo_ash"][data-mode="dark"][data-screen="scheduled"] .main-wrap::before {
+  /* dark 模式下竹影看起来更"实"（背景深 + 竹色淡），综合 .7 × .08 ≈ 6%。 */
+  opacity: .08;
+}
+
+@media (prefers-color-scheme: dark) {
+  .linnsy-window[data-theme="bamboo_ash"][data-mode="auto"][data-screen="settings"] .main-wrap::before,
+  .linnsy-window[data-theme="bamboo_ash"][data-mode="auto"][data-screen="chat"] .main-wrap::before,
+  .linnsy-window[data-theme="bamboo_ash"][data-mode="auto"][data-screen="tasks"] .main-wrap::before,
+  .linnsy-window[data-theme="bamboo_ash"][data-mode="auto"][data-screen="scheduled"] .main-wrap::before {
+    opacity: .08;
+  }
+}
+
+/* 卡片：轻半透 + 轻磨砂 → 宣纸透影质感
+ *
+ * bamboo_ash 的竹影是细线稿。上一版强 backdrop blur 会把线条平均成一团
+ * 接近透明的雾；再叠上卡片自身浅色与顶部渐隐，肉眼就会误以为卡片不透明。
+ *
+ * 修复策略：
+ *   - light 下卡片只保留 24% 浮层色，让竹影真实参与混色；
+ *   - blur 降到 1px，只做宣纸式软化，不再把细竹叶抹掉；
+ */
+.linnsy-window[data-theme="bamboo_ash"] .memory-preview-card {
+  background: color-mix(in srgb, var(--color-bg-floating) 20%, transparent);
+  -webkit-backdrop-filter: blur(3px) saturate(1.02);
+          backdrop-filter: blur(1px) saturate(1.02);
+}
+
+.linnsy-window[data-theme="bamboo_ash"][data-mode="dark"] .memory-preview-card {
+  background: color-mix(in srgb, var(--color-bg-floating) 42%, transparent);
+  -webkit-backdrop-filter: blur(5px) saturate(1.04);
+          backdrop-filter: blur(5px) saturate(1.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  .linnsy-window[data-theme="bamboo_ash"][data-mode="auto"] .memory-preview-card {
+    background: color-mix(in srgb, var(--color-bg-floating) 42%, transparent);
+    -webkit-backdrop-filter: blur(5px) saturate(1.04);
+            backdrop-filter: blur(5px) saturate(1.04);
+  }
+}

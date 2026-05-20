@@ -1,0 +1,61 @@
+.main-wrap {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.main-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 14px;
+  background: var(--color-bg);
+}
+
+html[data-platform="win32"] .main-topbar {
+  padding-right: 152px;
+}
+
+.conn-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-fg-muted);
+  font-size: 11.5px;
+  -webkit-app-region: no-drag;
+}
+
+.conn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.conn-dot--online { background: var(--color-success-dot); }
+.conn-dot--offline { background: var(--color-error); }
+
+.error-banner {
+  margin: 0 32px 8px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-error-bg);
+  color: var(--color-error-fg);
+  font-size: 12.5px;
+}
+
+.chat-view,
+.settings-view,
+.scheduled-view,
+.onboarding-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-view {
+  overflow-y: auto;
+  background: var(--color-bg);
+}

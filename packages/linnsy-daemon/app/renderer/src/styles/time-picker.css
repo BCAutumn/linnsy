@@ -1,0 +1,166 @@
+/* Time picker — layout aligned with linnya TimePicker; colors use Linnsy tokens */
+
+.tp-root {
+  position: relative;
+  width: auto;
+  display: inline-block;
+}
+
+.tp-trigger {
+  width: 140px;
+  height: 32px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 0.5px solid transparent;
+  background-color: var(--color-bg-sunken);
+  color: var(--color-fg-muted);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 0 0 0.5px var(--color-border);
+}
+
+.tp-trigger:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.tp-trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 0.5px var(--color-primary);
+}
+
+.tp-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 120;
+  isolation: isolate;
+  width: max-content;
+  max-width: min(220px, calc(100vw - 24px));
+  box-sizing: border-box;
+  background-color: var(--color-bg-elevated);
+  border-radius: 8px;
+  box-shadow: var(--shadow-popover);
+  min-width: 140px;
+}
+
+.tp-popover.tp-popover--portal {
+  position: fixed;
+  width: max-content;
+  max-width: min(220px, calc(100vw - 24px));
+  box-sizing: border-box;
+}
+
+.tp-popover.is-opening {
+  animation: custom-select-enter 0.15s ease both;
+}
+
+.tp-popover.is-closing {
+  animation: custom-select-leave 0.15s ease both;
+}
+
+.tp-popover-body {
+  position: relative;
+  z-index: 1;
+  padding: 8px 12px 6px;
+}
+
+.tp-select-portal-host {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.tp-select-portal-host .custom-select-options {
+  pointer-events: auto;
+}
+
+.tp-select-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 4px;
+}
+
+.tp-select-wrap {
+  display: flex;
+  min-width: 0;
+  width: auto;
+}
+
+.tp-select-wrap--hour {
+  justify-self: start;
+  justify-content: flex-start;
+}
+
+.tp-select-wrap--minute {
+  justify-self: end;
+  justify-content: flex-end;
+}
+
+.tp-select-wrap .custom-select {
+  width: auto;
+}
+
+.tp-select-row .custom-select-trigger {
+  /* Arrow absolute right:9px (~14px); reserve gutter (~full-scale 28px). Avoid flex-end on label — it pushes digits toward the chevron. */
+  min-width: 52px;
+  width: auto;
+  min-height: auto;
+  height: auto;
+  font-size: 12px;
+  padding: 4px 24px 4px 8px;
+  color: var(--color-fg-muted);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+}
+
+.tp-select-row .custom-select-trigger:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+}
+
+.tp-separator {
+  font-size: 12px;
+  color: var(--color-fg-subtle);
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  justify-self: center;
+}
+
+.tp-actions {
+  position: relative;
+  z-index: 2;
+  padding: 8px 12px 12px;
+}
+
+.tp-actions .action-buttons-container {
+  width: 100%;
+  justify-content: space-between;
+}
+
+/*
+ * Time lists use the shared ScrollArea geometry; only visibility differs from normal hover-reveal areas.
+ */
+.custom-select-options.scroll-area.custom-select-options--time-scroll {
+  box-sizing: border-box;
+  max-height: min(180px, 40vh);
+}
+
+/* Hour/minute rows: center digits inside each option row (not the trigger). */
+.custom-select-options.scroll-area.custom-select-options--time-scroll .custom-select-option {
+  justify-content: center;
+  padding-inline: 6px;
+}
+
+.custom-select-options.scroll-area.custom-select-options--time-scroll .custom-select-option-label {
+  flex: none;
+  min-width: 0;
+  text-align: center;
+}

@@ -1,0 +1,564 @@
+.scheduled-view {
+  overflow-y: auto;
+  padding: 24px 32px 48px;
+}
+
+.scheduled-view-shell {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.scheduled-view-error {
+  margin: 0 0 18px;
+  padding: 9px 11px;
+  border-radius: var(--radius-sm);
+  background: var(--color-error-bg);
+  color: var(--color-error-fg);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.scheduled-view-panel {
+  min-width: 0;
+  padding: 0;
+}
+
+.scheduled-view-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 0 12px;
+}
+
+.scheduled-view-panel-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scheduled-view-panel-header h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.scheduled-view-panel-create {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  margin: -5px -8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-fg-muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .14s ease, color .14s ease;
+}
+
+.scheduled-view-panel-create .fluent-icon {
+  color: currentColor;
+}
+
+.scheduled-view-panel-create:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.scheduled-view-panel-create:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.scheduled-view-panel-create:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.scheduled-view-empty {
+  min-height: 112px;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 22px 12px;
+  color: var(--color-fg-muted);
+  text-align: center;
+}
+
+.scheduled-view-empty .fluent-icon {
+  color: var(--color-fg-subtle);
+}
+
+.scheduled-view-empty p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.scheduled-view-list {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.scheduled-view-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--color-border) 72%, transparent);
+  transition: background .14s ease, box-shadow .14s ease;
+}
+
+.scheduled-view-row:hover {
+  background: var(--color-surface-hover);
+  box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--color-border-strong) 72%, var(--color-border));
+}
+
+.scheduled-view-row-main {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+}
+
+.scheduled-view-row-main > div {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.scheduled-view-status-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+.scheduled-view-status-dot.status-failed {
+  background: var(--color-error);
+}
+
+.scheduled-view-status-dot.status-muted {
+  background: var(--color-fg-subtle);
+}
+
+.scheduled-view-row--undelivered {
+  background: color-mix(in srgb, var(--color-error-bg) 72%, transparent);
+  box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--color-error) 24%, var(--color-border));
+}
+
+/**
+ * ─── 未送达卡片（极简两行）──────────────────────────────
+ * 标题独占一行 + meta 行（红徽章 + 一次性·原计划时间）+ 右上角删除。
+ * 不画状态点、不展开历史、不显示「已停用」副行：详见 ScheduledReminderList.tsx 注释。
+ *
+ * align-items: flex-start：删除按钮顶对齐与其他卡片操作条一致；
+ * 主标题在视觉上和按钮顶端齐平，扫视行为可预测。
+ */
+.scheduled-view-undelivered-row {
+  align-items: flex-start;
+  min-height: 0;
+  padding: 12px 12px;
+}
+
+.scheduled-view-undelivered-main {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.scheduled-view-undelivered-row .scheduled-view-undelivered-title {
+  display: -webkit-box;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  white-space: normal;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.scheduled-view-undelivered-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/** 行内文字保底色一致；具体字号交给 .scheduled-view-row span 全局规则 */
+.scheduled-view-undelivered-row .scheduled-view-undelivered-schedule {
+  color: var(--color-fg-muted);
+}
+
+.scheduled-view-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.scheduled-view-badge--failed {
+  background: color-mix(in srgb, var(--color-error) 14%, transparent);
+  color: var(--color-error-fg);
+  box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--color-error) 36%, transparent);
+}
+
+.scheduled-view-row strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.scheduled-view-row .scheduled-view-row-frequency {
+  color: var(--color-fg);
+  font-size: 12.5px;
+  font-weight: 450;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.scheduled-view-row span,
+.scheduled-view-row small {
+  color: var(--color-fg-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.scheduled-view-row .action-buttons-container,
+.scheduled-view-row .icon-action-buttons {
+  flex: none;
+}
+
+.scheduled-view-row-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex: none;
+}
+
+.scheduled-view-archived {
+  margin-top: 10px;
+}
+
+.scheduled-view-archived summary {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-fg-muted);
+  font-size: 12.5px;
+  font-weight: 500;
+  list-style: none;
+  transition: background .14s ease, color .14s ease, box-shadow .14s ease;
+}
+
+.scheduled-view-archived summary::-webkit-details-marker {
+  display: none;
+}
+
+.scheduled-view-archived summary:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.scheduled-view-archived summary:active {
+  background: var(--color-surface-selected);
+}
+
+.scheduled-view-archived summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.scheduled-view-archived summary .fluent-icon {
+  color: var(--color-fg-subtle);
+  transition: transform .14s ease, color .14s ease;
+}
+
+.scheduled-view-archived[open] summary {
+  background: var(--color-surface-selected);
+  color: var(--color-fg);
+}
+
+.scheduled-view-archived[open] summary .fluent-icon {
+  color: var(--color-primary);
+  transform: rotate(90deg);
+}
+
+.scheduled-view-history-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+/**
+ * 行用 center 对齐：状态徽标和「时间 · 文本」都按盒中线对齐，避免不同字号下基线参差。
+ */
+.scheduled-view-history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--color-fg-muted);
+}
+
+/**
+ * 状态徽标：固定 14×14 的盒子，里面的字符（✓ ✗ •）通过 grid 居中。
+ * 字符大小用 em，14px 盒子里的字符也是相对盒高放大；这样字号变化只影响字形，
+ * 不会撑大行盒高度，整行视觉中线一直跟时间文本对齐。
+ */
+.scheduled-view-history-status {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  font-size: 11px;
+  color: var(--color-primary);
+}
+
+.scheduled-view-history-status.status-failed {
+  color: var(--color-error-fg);
+}
+
+/**
+ * 跳过 / 运行：字符 • 在不同字体里位置不一定真正居中（PingFang/苹方常偏下）。
+ * 直接用 CSS 画 6px 实心圆代替字形，避免对字体敏感；颜色继承 currentColor。
+ */
+.scheduled-view-history-status.status-skipped_grace,
+.scheduled-view-history-status.status-running {
+  font-size: 0;
+  color: var(--color-fg-subtle);
+}
+
+.scheduled-view-history-status.status-skipped_grace::before,
+.scheduled-view-history-status.status-running::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.scheduled-view-history-time {
+  flex: none;
+}
+
+.scheduled-view-history-status-text {
+  color: var(--color-error-fg);
+}
+
+.scheduled-view-history-item.status-skipped_grace .scheduled-view-history-status-text,
+.scheduled-view-history-item.status-running .scheduled-view-history-status-text {
+  color: var(--color-fg-subtle);
+}
+
+.scheduled-view-history-open {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 4px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: background .14s ease;
+}
+
+.scheduled-view-history-open:hover {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.scheduled-view-history-open:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.scheduled-view-skip-future {
+  margin-top: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-sunken);
+  cursor: pointer;
+  user-select: none;
+}
+
+.scheduled-view-skip-future:hover {
+  background: var(--color-surface-hover);
+}
+
+.scheduled-view-skip-future input[type="checkbox"] {
+  margin-top: 2px;
+  flex: none;
+  cursor: pointer;
+}
+
+.scheduled-view-skip-future > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.scheduled-view-skip-future-label {
+  font-size: 12.5px;
+  color: var(--color-fg);
+  line-height: 1.5;
+}
+
+.scheduled-view-skip-future-hint {
+  font-size: 11.5px;
+  color: var(--color-fg-muted);
+  line-height: 1.5;
+}
+
+.cron-create-form {
+  width: min(520px, calc(100vw - 32px));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 4px 16px 16px;
+}
+
+.cron-create-field {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.cron-create-field--full,
+.cron-create-error {
+  grid-column: 1 / -1;
+}
+
+/* Visual captions stay outside interactive controls so hover never hits nested label associations. */
+.cron-create-field-caption {
+  display: block;
+  color: var(--color-fg);
+  font-size: 12.5px;
+}
+
+.cron-create-field input,
+.cron-create-field textarea {
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  outline: none;
+  background: var(--color-bg-sunken);
+  color: var(--color-fg);
+  box-shadow: inset 0 0 0 .5px var(--color-border);
+  font: inherit;
+  font-size: 12.5px;
+}
+
+.cron-create-field .custom-select {
+  width: 100%;
+  max-width: 100%;
+}
+
+.cron-create-field .sdp-root,
+.cron-create-field .tp-root {
+  display: block;
+  width: 100%;
+}
+
+.cron-create-field .sdp-input,
+.cron-create-field .tp-trigger {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cron-create-field textarea.cron-create-query-textarea {
+  display: block;
+  min-height: 96px;
+  height: 96px;
+  max-height: 96px;
+  resize: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  line-height: 1.55;
+}
+
+.cron-create-field input:focus,
+.cron-create-field textarea:focus {
+  box-shadow: inset 0 0 0 .5px var(--color-primary);
+}
+
+.cron-create-error {
+  margin: 0;
+  color: var(--color-error-fg);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .scheduled-view {
+    padding: 18px 20px 36px;
+  }
+
+  .scheduled-view-row {
+    display: grid;
+  }
+
+  /* 窄屏行变两格后，操作组仍贴右，避免中间拖一大条空白像「长条容器」 */
+  .scheduled-view-row-actions {
+    justify-content: flex-end;
+    /* grid 子项默认 align-self:stretch 时，这一行会被拉成跟主区一样高，看起来像「巨高一条」 */
+    align-self: start;
+    justify-self: end;
+    width: max-content;
+    max-width: 100%;
+  }
+
+  .scheduled-view-row .action-buttons-container,
+  .scheduled-view-row .icon-action-buttons {
+    justify-content: flex-start;
+  }
+
+  .cron-create-form {
+    grid-template-columns: 1fr;
+  }
+}

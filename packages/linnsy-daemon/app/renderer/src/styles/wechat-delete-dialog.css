@@ -1,0 +1,21 @@
+/*
+ * 微信账号删除确认弹窗。
+ * 单独放这里，避免 settings.css 继续膨胀。
+ */
+
+.wechat-delete-dialog-body {
+  padding: 8px 16px 14px;
+}
+
+.wechat-delete-dialog-body p {
+  max-width: 52ch;
+  color: var(--color-fg-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.wechat-delete-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px 16px;
+}

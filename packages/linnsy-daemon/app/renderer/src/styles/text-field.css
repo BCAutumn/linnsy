@@ -1,0 +1,79 @@
+.text-field {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+  color: var(--color-fg);
+  font-size: 12.5px;
+}
+
+.text-field-label {
+  color: var(--color-fg-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.text-field-control {
+  position: relative;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  border: 0.5px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  color: var(--color-fg);
+  transition: border-color .12s, color .12s;
+}
+
+.text-field-control:focus-within {
+  border-color: color-mix(in srgb, var(--color-primary) 48%, var(--color-border));
+  background: var(--color-bg-elevated);
+}
+
+.text-field-control input {
+  width: 100%;
+  min-width: 0;
+  min-height: 33px;
+  padding: 7px 11px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+.text-field-control input::placeholder {
+  color: var(--color-fg-subtle);
+}
+
+.text-field-control input:disabled {
+  cursor: not-allowed;
+}
+
+.text-field:has(.text-field-trailing) .text-field-control input {
+  padding-right: 38px;
+}
+
+.text-field-trailing {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  display: inline-flex;
+  transform: translateY(-50%);
+}
+
+.text-field-icon-button {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-fg-subtle);
+}
+
+.text-field-icon-button:hover:not(:disabled) {
+  background: transparent;
+  color: var(--color-fg-subtle);
+}

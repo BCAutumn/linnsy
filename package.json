@@ -1,0 +1,26 @@
+{
+  "name": "linnsy",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:daemon": "npm --prefix packages/linnsy-daemon install",
+    "doctor": "cd packages/linnsy-daemon && npx tsx src/cli.ts doctor",
+    "chat": "cd packages/linnsy-daemon && npx tsx src/cli.ts chat",
+    "chat:audit": "cd packages/linnsy-daemon && npx tsx src/cli.ts chat:audit",
+    "dev": "npm run chat",
+    "dev:daemon": "npm --prefix packages/linnsy-daemon run dev:daemon",
+    "dev:frontend": "npm --prefix packages/linnsy-daemon run dev:frontend",
+    "dev:electron": "npm --prefix packages/linnsy-daemon run dev:electron",
+    "dev:wechat-gateway": "npm --prefix packages/linnsy-daemon run dev:wechat-gateway",
+    "test": "npm --prefix packages/linnsy-daemon test",
+    "test:renderer": "npm --prefix packages/linnsy-daemon run test:renderer",
+    "test:e2e": "npm --prefix packages/linnsy-daemon run test:e2e",
+    "lint": "npm --prefix packages/linnsy-daemon run lint",
+    "typecheck": "npm --prefix packages/linnsy-daemon run typecheck",
+    "guard:boundary": "npm --prefix packages/linnsy-daemon run guard:boundary",
+    "build": "npm --prefix packages/linnsy-daemon run build",
+    "build:frontend": "npm --prefix packages/linnsy-daemon run build:frontend",
+    "build:electron": "npm --prefix packages/linnsy-daemon run build:electron"
+  }
+}

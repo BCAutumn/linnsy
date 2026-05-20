@@ -1,0 +1,216 @@
+/* Simple date picker — layout aligned with linnya SimpleDatePicker; colors use Linnsy tokens */
+
+.sdp-root {
+  position: relative;
+  width: auto;
+  display: inline-block;
+}
+
+.sdp-input {
+  width: 140px;
+  height: 32px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 0.5px solid transparent;
+  background-color: var(--color-bg-sunken);
+  color: var(--color-fg);
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 0 0 0.5px var(--color-border);
+}
+
+.sdp-input:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.sdp-input:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 0.5px var(--color-primary);
+}
+
+.sdp-input-value {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sdp-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 120;
+  background-color: var(--color-bg-elevated);
+  border-radius: 8px;
+  box-shadow: var(--shadow-popover);
+  padding: 8px 10px 10px;
+  min-width: 220px;
+}
+
+/* Portaled under `.linnsy-window`: block-level box would stretch to full host width — shrink-wrap */
+.sdp-panel.sdp-panel--portal {
+  position: fixed;
+  width: max-content;
+  max-width: min(272px, calc(100vw - 24px));
+  box-sizing: border-box;
+}
+
+.sdp-panel.is-opening {
+  animation: custom-select-enter 0.15s ease both;
+}
+
+.sdp-panel.is-closing {
+  animation: custom-select-leave 0.15s ease both;
+}
+
+.sdp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.sdp-month-label {
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sdp-year-text {
+  cursor: pointer;
+  margin-right: 0;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sdp-year-text:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.sdp-nav-btn {
+  border: none;
+  background: transparent;
+  color: var(--color-fg-subtle);
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sdp-nav-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-fg-muted);
+}
+
+.sdp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.sdp-weekday {
+  font-size: 11px;
+  text-align: center;
+  color: var(--color-fg-subtle);
+}
+
+.sdp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.sdp-cell {
+  width: 26px;
+  height: 24px;
+  border-radius: 9999px;
+  border: none;
+  background-color: transparent;
+  color: var(--color-fg);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.sdp-cell.is-empty {
+  cursor: default;
+}
+
+.sdp-cell:not(.is-empty):not(:disabled):hover {
+  background-color: var(--color-surface-hover);
+}
+
+.sdp-cell.is-outside-month {
+  color: var(--color-fg-subtle);
+  cursor: default;
+  opacity: 0.65;
+}
+
+.sdp-cell.is-outside-month:hover {
+  background-color: transparent;
+}
+
+.sdp-cell.is-today {
+  font-weight: 500;
+}
+
+.sdp-cell.is-selected {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  font-weight: 500;
+}
+
+.sdp-month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.sdp-month-item {
+  height: 26px;
+  border-radius: 6px;
+  border: none;
+  background-color: transparent;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sdp-month-item:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-fg);
+}
+
+.sdp-month-item.is-current-month {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+  font-weight: 500;
+}
