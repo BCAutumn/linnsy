@@ -114,6 +114,12 @@ See [`packages/linnsy-daemon/src/README.md`](./packages/linnsy-daemon/src/README
 
 ## Quickstart
 
+### One-line prompt for coding agents
+
+If you use Claude Code, Codex, Cursor, Windsurf, or another coding agent, you can paste this directly:
+
+> Clone https://github.com/BCAutumn/linnsy first; then follow README.md, docs/guides/getting-started.md, and packages/linnsy-daemon/README.md to initialize a local Linnsy demo with the CLI path first, prefer npm, run npm run install:daemon and npm run doctor, do not wire real IM accounts or real external desktop agent tools unless I explicitly ask, and finish by telling me the next command to run plus which DEEPSEEK_API_KEY / OPENAI_API_KEY / ANTHROPIC_API_KEY settings and ~/.linnsy/config.yaml fields are still missing.
+
 ### Prerequisites
 
 - Node.js 20 LTS+

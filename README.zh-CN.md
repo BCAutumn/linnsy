@@ -111,6 +111,12 @@ DeepSeek 思考模式 / `reasoning_effort` 这类厂商扩展走 `provider_optio
 
 ## 快速上手
 
+### 给编程 Agent 的一句话提示词
+
+如果你使用 Claude Code、Codex、Cursor、Windsurf 或其他编程 Agent，可以直接粘贴这段：
+
+> 先 clone https://github.com/BCAutumn/linnsy；然后按照 README.zh-CN.md、docs/guides/getting-started.md 和 packages/linnsy-daemon/README.md，优先走 CLI 路径初始化一个本地 Linnsy demo，优先使用 npm，运行 npm run install:daemon 和 npm run doctor，除非我明确要求，不要接入真实 IM 账号或真实外部桌面 agent 工具；最后告诉我下一条该运行的命令，以及 DEEPSEEK_API_KEY / OPENAI_API_KEY / ANTHROPIC_API_KEY 和 ~/.linnsy/config.yaml 里还缺哪些设置。
+
 ### 前置条件
 
 - Node.js 20 LTS+
